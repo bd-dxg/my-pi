@@ -14,8 +14,8 @@
 ├── settings.json      # pi 核心设置（主题、包、提供商、代理等）
 ├── mcp.json           # MCP 服务器配置（chrome-devtools、searchcode、tavily）
 ├── open-tui.json      # Open TUI 终端 UI 配置
+├── models.json        # 自定义 Provider 与模型配置
 ├── extensions/        # 自定义扩展
-│   ├── custom-provider.ts
 │   ├── permission-gate.ts
 │   ├── qna.ts
 │   ├── question.ts
@@ -73,6 +73,37 @@ pi install pi-rounded-tools
 - **chrome-devtools** — Chrome DevTools 协议集成（通过 `npx chrome-devtools-mcp`）
 - **searchcode** — 公共代码搜索与分析
 - **tavily-remote-mcp** — 网络搜索（实时信息、新闻、事实）
+
+### models.json
+
+`models.json` 用于声明自定义 AI 提供商与模型，替代原有的 TypeScript 扩展方式。
+
+```json
+{
+  "providers": {
+    "ollama": { // 字段可修改为中转站名称,方便识别
+      "baseUrl": "http://localhost:11434/v1", // 填写中转站域名
+      "api": "openai-completions", // 一般不用修改
+      "apiKey": "ollama", // 填写生成的key
+      "models": [
+        {
+          "id": "llama3.1:8b", // 模型名字
+          "name": "Llama 3.1 8B (Local)", // 与上方相同
+          "reasoning": false, // 是否支持思考,不支持就是false,支持就选true
+          "input": ["text"],
+          "compat": {
+            "supportsReasoningEffort": true,
+            "supportsDeveloperRole": false // 部分模型不支持Developer,所以要关闭(可选配置)
+          },
+          "contextWindow": 128000, // 自行查询,现在模型都是1M了
+          "maxTokens": 32000, // 自行查询
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        }
+      ]
+    }
+  }
+}
+```
 
 ### Open TUI
 

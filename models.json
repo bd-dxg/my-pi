@@ -1,0 +1,54 @@
+{
+  "providers": {
+    "商汤科技": {
+      "baseUrl": "https://token.sensenova.cn/v1",
+      "api": "openai-completions",
+      "apiKey": "sk-xxx",
+      "models": [
+        {
+          "id": "sensenova-6.7-flash-lite",
+          "name": "sensenova-6.7-flash-lite",
+          "reasoning": false,
+          "input": ["text"],
+          "contextWindow": 256000,
+          "maxTokens": 64000,
+          "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 }
+        },
+        {
+          "id": "deepseek-v4-flash",
+          "name": "deepseek-v4-flash",
+          "reasoning": true,
+          "input": ["text"],
+          "compat": {
+            "supportsReasoningEffort": true,
+            "supportsDeveloperRole": false
+          },
+          "cost": { "input": 1, "output": 2, "cacheRead": 0.02, "cacheWrite": 0 },
+          "contextWindow": 1000000,
+          "maxTokens": 64000
+        }
+      ]
+    },
+    "LinuxDo": {
+      "name": "LinuxDo",
+      "baseUrl": "https://hub.linux.do/v1",
+      "apiKey": "ah-xxx",
+      "api": "openai-completions",
+      "models": [
+        {
+          "id": "deepseek-v4-flash",
+          "name": "deepseek-v4-flash",
+          "reasoning": true,
+          "compat": {
+            "supportsReasoningEffort": true,
+            "supportsDeveloperRole": false
+          },
+          "input": ["text"],
+          "cost": { "input": 1, "output": 2, "cacheRead": 0.02, "cacheWrite": 0 },
+          "contextWindow": 1000000,
+          "maxTokens": 64000
+        }
+      ]
+    }
+  }
+}
