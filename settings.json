@@ -1,0 +1,31 @@
+{
+  "lastChangelogVersion": "0.82.1",
+  "theme": "one-dark",
+  "defaultThinkingLevel": "high",
+  "packages": [
+    "npm:pi-mcp-adapter",
+    "npm:pi-open-tui",
+    "npm:@tintinweb/pi-subagents",
+    "npm:@pi-lab/notify",
+    "npm:@juicesharp/rpiv-todo",
+    "npm:@firstpick/pi-themes-bundle",
+    "npm:pi-rounded-tools"
+  ],
+  "retry": {
+    "enabled": true,
+    "maxRetries": 8,
+    "baseDelayMs": 5000,
+    "provider": {
+      "maxRetryDelayMs": 120000
+    }
+  },
+  "compaction": {
+    "enabled": false
+  },
+  "httpProxy": "http://127.0.0.1:xxxx",
+  "hideThinkingBlock": true,
+  "showCacheMissNotices": false,
+  "defaultProvider": "商汤科技",
+  "defaultModel": "sensenova-6.7-flash-lite",
+  "quietStartup": true
+}
