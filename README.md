@@ -13,13 +13,12 @@
 ├── AGENTS.md          # 全局开发配置（语言、编码原则、工作流、命令策略）
 ├── settings.json      # pi 核心设置（主题、包、提供商、代理等）
 ├── mcp.json           # MCP 服务器配置（chrome-devtools、searchcode、tavily）
-├── open-tui.json      # Open TUI 终端 UI 配置
 ├── models.json        # 自定义 Provider 与模型配置
 ├── extensions/        # 自定义扩展
 │   ├── permission-gate.ts
-│   ├── qna.ts
-│   ├── question.ts
-│   ├── questionnaire.ts
+│   ├── qna.ts.bak
+│   ├── question.ts.bak
+│   ├── questionnaire.ts.bak
 │   ├── structured-output.ts
 │   └── tools.ts
 ├── LICENSE
@@ -34,10 +33,13 @@
 |--------|------|
 | `theme` | 界面主题（one-dark） |
 | `defaultProvider` / `defaultModel` | 默认 AI 提供商与模型 |
+| `defaultThinkingLevel` | 默认思考等级（high） |
 | `httpProxy` | HTTP 代理地址 |
 | `packages` | 需要额外安装的 pi 包（见下方安装说明） |
-| `retry` | 自动重试策略（最多 8 次，基础延迟 5s） |
+| `retry` | 自动重试策略（最多 8 次，基础延迟 10s） |
+| `compaction` | 上下文压缩（已关闭） |
 | `hideThinkingBlock` | 隐藏思考过程 |
+| `showCacheMissNotices` | 缓存未命中提示 |
 | `quietStartup` | 静默启动 |
 
 ### packages 安装
@@ -47,11 +49,10 @@
 ```powershell
 pi install pi-mcp-adapter
 pi install pi-open-tui
-pi install @tintinweb/pi-subagents
-pi install @pi-lab/notify
 pi install @juicesharp/rpiv-todo
 pi install @firstpick/pi-themes-bundle
-pi install pi-rounded-tools
+pi install pi-win-notify
+pi install @ff-labs/pi-fff
 ```
 
 各包功能：
@@ -60,11 +61,10 @@ pi install pi-rounded-tools
 |------|------|
 | `pi-mcp-adapter` | MCP 协议适配器 |
 | `pi-open-tui` | 终端 UI 增强 |
-| `@tintinweb/pi-subagents` | 子代理支持 |
-| `@pi-lab/notify` | 通知功能 |
 | `@juicesharp/rpiv-todo` | 任务管理 |
 | `@firstpick/pi-themes-bundle` | 主题包合集 |
-| `pi-rounded-tools` | 圆角工具样式 |
+| `pi-win-notify` | Windows 通知 |
+| `@ff-labs/pi-fff` | ff 文件搜索工具 |
 
 ### MCP 服务
 
@@ -105,10 +105,6 @@ pi install pi-rounded-tools
 }
 ```
 
-### Open TUI
-
-`open-tui.json` 配置了终端 UI 的显示语言、图标、底部状态栏段落和遥测选项。
-
 ## 📜 开发规范（AGENTS.md）
 
 `AGENTS.md` 是 AI 编码助手的行为准则，核心要点：
@@ -117,13 +113,13 @@ pi install pi-rounded-tools
 - **编码原则**：先思考再编码、简洁优先、外科手术式修改、目标驱动执行
 - **工作流**：普通功能 → 编码 → 审查 → 提交；复杂功能先规划
 - **命令策略**：文件操作用专用工具，Git 只读操作自动执行，管理员/交互命令交用户执行
-- **自动代理**：代码审查 `/code-review-expert`、复杂规划 `/planning-with-files` 自动触发
+- **自动代理**：代码审查 `code-review-expert`、复杂规划 `planning-with-files` 自动触发
 
 ## 🚀 快速开始
 
 1. 克隆本仓库
 2. 安装依赖包（见上方 `packages 安装` 章节）
-3. 将 `settings.json`、`mcp.json`、`open-tui.json` 放置在 pi 配置目录中
+3. 将 `settings.json`、`mcp.json` 放置在 pi 配置目录中
 4. 将 `AGENTS.md` 放置在项目根目录作为 AI 行为准则
 
 ## 感谢
