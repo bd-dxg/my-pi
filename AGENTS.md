@@ -17,7 +17,7 @@
 
 - 明确说明假设；有多种解读时，列出选项，不要悄悄选一个
 - 遇到更简单的方案，主动说出来；真正不清楚时，**停下来问**，而不是猜
-- 需求不明确 → 主动使用 /grill-me skill 询问
+- 需求不明确 → 主动使用 `grill-me` skill 询问
 
 ### 2. 简洁优先
 
@@ -52,7 +52,6 @@
 - **文件操作**：使用专用工具（Read、Write、Edit、Glob、Grep），不用 find/grep/cat/echo 等 shell 命令
 - **Git 只读**：`git status/log/diff/branch/show/blame`
 - **GitHub 操作**：`gh pr/issue/repo/search` 等
-- **类型检查**：`vp check`
 
 ### 提供给用户执行（PowerShell 代码块）
 
@@ -68,18 +67,18 @@
 
 ### 普通功能
 
-规划 → 编码 → `/code-review-expert` → `/gencom` 提交
+规划 → 编码 → `code-review-expert` → `gencom` 提交
 
 ### 复杂功能 / 架构变更
 
-`/planning-with-files` 生成计划 → 用户确认 → 分阶段实现 → 全面审查 → `/gencom` 提交
+`planning-with-files` 生成计划 → 用户确认 → 分阶段实现 → 全面审查 → `gencom` 提交
 
 ### 自动触发代理
 
 | 代理                   | 触发条件                               |
 | ---------------------- | -------------------------------------- |
-| `/code-review-expert`  | 写完任何代码后，立即触发（必须）       |
-| `/planning-with-files` | 复杂功能或大型重构，编码前触发（推荐） |
+| `code-review-expert`  | 写完任何代码后，立即触发（必须）       |
+| `planning-with-files` | 复杂功能或大型重构，编码前触发（推荐） |
 
 ## MCP
 

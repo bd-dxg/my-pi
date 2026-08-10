@@ -1,20 +1,19 @@
 {
-  "lastChangelogVersion": "0.82.1",
+  "lastChangelogVersion": "0.84.1",
   "theme": "one-dark",
   "defaultThinkingLevel": "high",
   "packages": [
     "npm:pi-mcp-adapter",
     "npm:pi-open-tui",
-    "npm:@tintinweb/pi-subagents",
-    "npm:@pi-lab/notify",
     "npm:@juicesharp/rpiv-todo",
     "npm:@firstpick/pi-themes-bundle",
-    "npm:pi-rounded-tools"
+    "npm:pi-win-notify",
+    "npm:@ff-labs/pi-fff"
   ],
   "retry": {
     "enabled": true,
     "maxRetries": 8,
-    "baseDelayMs": 5000,
+    "baseDelayMs": 10000,
     "provider": {
       "maxRetryDelayMs": 120000
     }
