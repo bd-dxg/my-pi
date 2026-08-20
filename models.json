@@ -6,9 +6,9 @@
       "apiKey": "sk-xxx",
       "models": [
         {
-          "id": "sensenova-6.7-flash-lite",
-          "name": "sensenova-6.7-flash-lite",
-          "reasoning": false,
+          "id": "sensenova-6.8-flash-lite",
+          "name": "sensenova-6.8",
+          "reasoning": true,
           "input": ["text"],
           "contextWindow": 256000,
           "maxTokens": 64000,
@@ -34,6 +34,7 @@
       "baseUrl": "https://hub.linux.do/v1",
       "apiKey": "ah-xxx",
       "api": "openai-completions",
+      "headers": { "user-agent": "Go-http-client/2.0" },
       "models": [
         {
           "id": "deepseek-v4-flash",
@@ -42,7 +43,7 @@
           "compat": {
             "supportsReasoningEffort": true,
             "supportsDeveloperRole": false
-          },
+            },
           "input": ["text"],
           "cost": { "input": 1, "output": 2, "cacheRead": 0.02, "cacheWrite": 0 },
           "contextWindow": 1000000,
@@ -52,3 +53,4 @@
     }
   }
 }
+
