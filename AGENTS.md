@@ -16,8 +16,7 @@
 ### 1. 先思考，再编码
 
 - 明确说明假设；有多种解读时，列出选项，不要悄悄选一个
-- 遇到更简单的方案，主动说出来；真正不清楚时，**停下来问**，而不是猜
-- 需求不明确 → 主动使用 `grill-me-docs-standalone` skill 询问
+- 遇到更简单的方案，主动说出来；真正不清楚时，**停下来问**，主动使用 `grill-me-docs-standalone` skill 询问
 
 ### 2. 简洁优先
 
@@ -62,7 +61,6 @@
 - 交互式命令（文本编辑器、交互式安装向导）
 - 系统管理命令（需要管理员权限）
 - 文件操作 shell 命令（rm、cp、mv、curl 等）
-- 提交/建议提交 git暂存区内容
 
 ## 核心工作流
 
@@ -81,10 +79,54 @@
 | `/code-review-expert`  | 写完任何代码后，立即触发（必须）       |
 | `/planning-with-files` | 复杂功能或大型重构，编码前触发（推荐） |
 
-## MCP
+## MCP 工具
 
-- Use tavily-remote-mcp for web search (current information, news, facts).
-- Use searchcode to search and analyze public git repositories.
+当前配置了 3 个 MCP 服务器，按需调用。首次使用某服务器时需先 `connect`。
+
+### searchcode — 公开 Git 仓库代码搜索/分析（6 tools）
+
+| 工具 | 用途 |
+|------|------|
+| `searchcode_code_search` | 跨任意公开 Git 仓库快速搜索代码 |
+| `searchcode_code_analyze` | 仓库概览：语言、复杂度、目录结构 |
+| `searchcode_code_get_file` | 获取远程仓库单个文件内容 |
+| `searchcode_code_get_files` | 批量获取远程仓库多个文件内容 |
+| `searchcode_code_file_tree` | 列出远程仓库的目录/文件树 |
+| `searchcode_code_get_findings` | 获取远程仓库代码质量分析结果 |
+
+> 适用场景：分析开源项目、搜索别人怎么实现某个功能、查看依赖源码。
+
+### tavily-remote-mcp — 网络搜索与网页提取（5 tools）
+
+| 工具 | 用途 |
+|------|------|
+| `tavily-remote-mcp_tavily_search` | 搜索当前信息、新闻、事实 |
+| `tavily-remote-mcp_tavily_extract` | 提取指定 URL 的页面内容（纯文本） |
+| `tavily-remote-mcp_tavily_crawl` | 从起始 URL 开始爬取网站，提取页面内容 |
+| `tavily-remote-mcp_tavily_map` | 映射网站结构，返回 URL 列表 |
+| `tavily-remote-mcp_tavily_research` | 对某个话题进行深度综合研究 |
+
+> 适用场景：查最新信息、新闻、事实，或需要读取某个网页内容时。
+
+
+### chrome-devtools — Chrome 浏览器自动化（3 tools）
+
+| 工具 | 用途 |
+|------|------|
+| `chrome-devtools_navigate` | 加载/跳转 URL |
+| `chrome-devtools_screenshot` | 截图 |
+| `chrome-devtools_evaluate` | 执行 JS 脚本 |
+
+> 适用场景：需要浏览器交互时（登录、JS 渲染页面、截图验证等）。
+
+### 使用方式
+
+- 查看服务器状态：`mcp({})`
+- 连接服务器：`mcp({ connect: "server-name" })`
+- 搜索工具：`mcp({ search: "keyword" })`
+- 查看工具详情：`mcp({ describe: "tool_name" })`
+- 调用工具：`mcp({ tool: "tool_name", args: { ... } })`
+- 批量调用：用 `mcpScript` 编写 JavaScript 串联多个调用
 
 ## 工作原则
 

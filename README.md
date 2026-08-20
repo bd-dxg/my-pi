@@ -15,11 +15,7 @@
 ├── mcp.json           # MCP 服务器配置（chrome-devtools、searchcode、tavily）
 ├── models.json        # 自定义 Provider 与模型配置
 ├── extensions/        # 自定义扩展
-│   ├── permission-gate.ts
-│   ├── qna.ts.bak
-│   ├── question.ts.bak
-│   ├── questionnaire.ts.bak
-│   ├── structured-output.ts
+│   ├── minimal-mode.ts
 │   └── tools.ts
 ├── LICENSE
 └── README.md
@@ -31,16 +27,20 @@
 
 | 配置项 | 说明 |
 |--------|------|
-| `theme` | 界面主题（one-dark） |
-| `defaultProvider` / `defaultModel` | 默认 AI 提供商与模型 |
+| `lastChangelogVersion` | 已读过的版本更新日志版本（0.84.2） |
+| `theme` | 界面主题（cc-light） |
+| `defaultProvider` / `defaultModel` | 默认 AI 提供商与模型（LinuxHub / deepseek-v4-flash） |
 | `defaultThinkingLevel` | 默认思考等级（high） |
-| `httpProxy` | HTTP 代理地址 |
+| `httpProxy` | HTTP 代理地址（127.0.0.1:7897） |
 | `packages` | 需要额外安装的 pi 包（见下方安装说明） |
-| `retry` | 自动重试策略（最多 8 次，基础延迟 10s） |
+| `retry` | 自动重试策略（最多 8 次，基础延迟 10s，provider 最大重试延迟 120s） |
 | `compaction` | 上下文压缩（已关闭） |
 | `hideThinkingBlock` | 隐藏思考过程 |
 | `showCacheMissNotices` | 缓存未命中提示 |
 | `quietStartup` | 静默启动 |
+| `tuiMode` | TUI 模式（regular） |
+| `fullscreenExitOutput` | 全屏模式退出时输出的内容（transcript） |
+| `markdown.mermaid` | Mermaid 图表渲染时机（final） |
 
 ### packages 安装
 
@@ -48,11 +48,11 @@
 
 ```powershell
 pi install pi-mcp-adapter
-pi install pi-open-tui
-pi install @juicesharp/rpiv-todo
-pi install @firstpick/pi-themes-bundle
-pi install pi-win-notify
 pi install @ff-labs/pi-fff
+pi install @juicesharp/rpiv-ask-user-question
+pi install @pi-unipi/notify
+pi install pi-cc-extensions
+pi install @tintinweb/pi-tasks
 ```
 
 各包功能：
@@ -60,11 +60,11 @@ pi install @ff-labs/pi-fff
 | 包名 | 说明 |
 |------|------|
 | `pi-mcp-adapter` | MCP 协议适配器 |
-| `pi-open-tui` | 终端 UI 增强 |
-| `@juicesharp/rpiv-todo` | 任务管理 |
-| `@firstpick/pi-themes-bundle` | 主题包合集 |
-| `pi-win-notify` | Windows 通知 |
-| `@ff-labs/pi-fff` | ff 文件搜索工具 |
+| `@ff-labs/pi-fff` | ff 文件搜索工具（ffgrep / fffind） |
+| `@juicesharp/rpiv-ask-user-question` | 结构化提问（ask_user_question 工具） |
+| `@pi-unipi/notify` | 跨平台通知（notify_user 工具） |
+| `pi-cc-extensions` | Claude Code 风格 UI、上下文检查等生产力套件 |
+| `@tintinweb/pi-tasks` | 任务管理（TaskCreate / TaskUpdate 等） |
 
 ### MCP 服务
 
@@ -82,9 +82,10 @@ pi install @ff-labs/pi-fff
 {
   "providers": {
     "ollama": { // 字段可修改为中转站名称,方便识别
-      "baseUrl": "http://localhost:11434/v1", // 填写中转站域名
+      "baseUrl": "http://xxx/v1", // 填写中转站域名
       "api": "openai-completions", // 一般不用修改
       "apiKey": "ollama", // 填写生成的key
+      "headers": { "user-agent": "Go-http-client/2.0" }, //部分要求指定UA,这里可以自定义配置
       "models": [
         {
           "id": "llama3.1:8b", // 模型名字
@@ -120,7 +121,7 @@ pi install @ff-labs/pi-fff
 1. 克隆本仓库
 2. 安装依赖包（见上方 `packages 安装` 章节）
 3. 将 `settings.json`、`mcp.json` 放置在 pi 配置目录中
-4. 将 `AGENTS.md` 放置在项目根目录作为 AI 行为准则
+4. 将 `AGENTS.md` 放置在`~\.pi\agent`目录作为 AI 行为全局准则
 
 ## 感谢
 

@@ -1,14 +1,14 @@
 {
-  "lastChangelogVersion": "0.84.1",
-  "theme": "one-dark",
+  "lastChangelogVersion": "0.84.2",
+  "theme": "cc-light",
   "defaultThinkingLevel": "high",
   "packages": [
     "npm:pi-mcp-adapter",
-    "npm:pi-open-tui",
-    "npm:@juicesharp/rpiv-todo",
-    "npm:@firstpick/pi-themes-bundle",
-    "npm:pi-win-notify",
-    "npm:@ff-labs/pi-fff"
+    "npm:@ff-labs/pi-fff",
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:@pi-unipi/notify",
+    "npm:pi-cc-extensions",
+    "npm:@tintinweb/pi-tasks"
   ],
   "retry": {
     "enabled": true,
@@ -21,10 +21,15 @@
   "compaction": {
     "enabled": false
   },
-  "httpProxy": "http://127.0.0.1:xxxx",
+  "httpProxy": "http://127.0.0.1:7897",
   "hideThinkingBlock": true,
   "showCacheMissNotices": false,
-  "defaultProvider": "商汤科技",
-  "defaultModel": "sensenova-6.7-flash-lite",
-  "quietStartup": true
+  "defaultProvider": "LinuxHub",
+  "defaultModel": "deepseek-v4-flash",
+  "quietStartup": true,
+  "tuiMode": "regular",
+  "fullscreenExitOutput": "transcript",
+  "markdown": {
+    "mermaid": "final"
+  }
 }
