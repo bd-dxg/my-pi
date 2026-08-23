@@ -15,7 +15,9 @@
 ├── mcp.json           # MCP 服务器配置（chrome-devtools、searchcode、tavily）
 ├── models.json        # 自定义 Provider 与模型配置
 ├── extensions/        # 自定义扩展
+│   ├── footer/             # TUI 底部状态栏（cwd/计时/context 进度/token 统计）
 │   ├── minimal-mode.ts
+│   ├── pi-rtk-optimizer/   # RTK 命令重写与输出压缩优化
 │   └── tools.ts
 ├── LICENSE
 └── README.md
@@ -28,7 +30,7 @@
 | 配置项 | 说明 |
 |--------|------|
 | `lastChangelogVersion` | 已读过的版本更新日志版本（0.84.2） |
-| `theme` | 界面主题（cc-light） |
+| `theme` | 界面主题（cc-dark） |
 | `defaultProvider` / `defaultModel` | 默认 AI 提供商与模型（LinuxHub / deepseek-v4-flash） |
 | `defaultThinkingLevel` | 默认思考等级（high） |
 | `httpProxy` | HTTP 代理地址（127.0.0.1:7897） |
@@ -52,7 +54,8 @@ pi install @ff-labs/pi-fff
 pi install @juicesharp/rpiv-ask-user-question
 pi install @pi-unipi/notify
 pi install pi-cc-extensions
-pi install @tintinweb/pi-tasks
+pi install pi-rtk-optimizer
+pi install @juicesharp/rpiv-todo
 ```
 
 各包功能：
@@ -64,7 +67,8 @@ pi install @tintinweb/pi-tasks
 | `@juicesharp/rpiv-ask-user-question` | 结构化提问（ask_user_question 工具） |
 | `@pi-unipi/notify` | 跨平台通知（notify_user 工具） |
 | `pi-cc-extensions` | Claude Code 风格 UI、上下文检查等生产力套件 |
-| `@tintinweb/pi-tasks` | 任务管理（TaskCreate / TaskUpdate 等） |
+| `pi-rtk-optimizer` | RTK 命令重写与输出压缩优化（节省 token） |
+| `@juicesharp/rpiv-todo` | 个人待办管理（todo-list 增删改查） |
 
 ### MCP 服务
 
