@@ -1,6 +1,6 @@
 {
   "lastChangelogVersion": "0.84.2",
-  "theme": "cc-light",
+  "theme": "cc-dark",
   "defaultThinkingLevel": "high",
   "packages": [
     "npm:pi-mcp-adapter",
@@ -8,7 +8,8 @@
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:@pi-unipi/notify",
     "npm:pi-cc-extensions",
-    "npm:@tintinweb/pi-tasks"
+    "npm:pi-rtk-optimizer",
+    "npm:@juicesharp/rpiv-todo"
   ],
   "retry": {
     "enabled": true,
