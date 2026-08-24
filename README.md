@@ -29,12 +29,13 @@
 
 | 配置项 | 说明 |
 |--------|------|
-| `lastChangelogVersion` | 已读过的版本更新日志版本（0.84.2） |
+| `lastChangelogVersion` | 已读过的版本更新日志版本（0.84.3） |
 | `theme` | 界面主题（cc-dark） |
-| `defaultProvider` / `defaultModel` | 默认 AI 提供商与模型（LinuxHub / deepseek-v4-flash） |
+| `defaultProvider` / `defaultModel` | 默认 AI 提供商与模型（LinuxHub / deepseek-v4-flash-vision-exp） |
 | `defaultThinkingLevel` | 默认思考等级（high） |
 | `httpProxy` | HTTP 代理地址（127.0.0.1:7897） |
 | `packages` | 需要额外安装的 pi 包（见下方安装说明） |
+| `defaultTools` | 默认工具列表（read、powershell、edit、write） |
 | `retry` | 自动重试策略（最多 8 次，基础延迟 10s，provider 最大重试延迟 120s） |
 | `compaction` | 上下文压缩（已关闭） |
 | `hideThinkingBlock` | 隐藏思考过程 |

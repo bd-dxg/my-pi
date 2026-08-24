@@ -1,5 +1,11 @@
 {
-  "lastChangelogVersion": "0.84.2",
+  "lastChangelogVersion": "0.84.3",
+  "defaultTools": [
+    "read",
+    "powershell",
+    "edit",
+    "write"
+  ],
   "theme": "cc-dark",
   "defaultThinkingLevel": "high",
   "packages": [
@@ -26,7 +32,7 @@
   "hideThinkingBlock": true,
   "showCacheMissNotices": false,
   "defaultProvider": "LinuxHub",
-  "defaultModel": "deepseek-v4-flash",
+  "defaultModel": "deepseek-v4-flash-vision-exp",
   "quietStartup": true,
   "tuiMode": "regular",
   "fullscreenExitOutput": "transcript",

@@ -3,7 +3,7 @@
 ## 语言和环境
 
 - **语言**: 所有输出（包括思考过程、回复、代码注释和 commit 信息）一律使用简体中文
-- **操作系统**: Windows 11 | **AI 终端**: Git Bash (MSYS2) | **用户终端**: PowerShell
+- **操作系统**: Windows 11 | **AI 终端**:PowerShell | **用户终端**: PowerShell
 - **环境限制**: 无 Python 环境，避免使用 Python 相关命令 和 脚本
 - **已安装 CLI**: GitHub CLI（`gh`），涉及 GitHub 仓库操作时优先使用
 
