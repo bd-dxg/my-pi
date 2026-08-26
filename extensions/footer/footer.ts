@@ -100,7 +100,7 @@ function renderStatsBlock(
 	if (hasCacheTokens && totals.latestCacheHitRate !== undefined) {
 		stats.push(theme.fg(cacheHitColor(totals.latestCacheHitRate), `${glyphs.cacheHit} ${totals.latestCacheHitRate.toFixed(1)}%`));
 	}
-	stats.push(theme.fg("warning", `${glyphs.cost} $${totals.cost.toFixed(3)}`));
+	stats.push(theme.fg("warning", `${glyphs.cost}${totals.cost.toFixed(2)}`));
 	return stats.join(` ${theme.fg("dim", "|")} `);
 }
 
