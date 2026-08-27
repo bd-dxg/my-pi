@@ -23,12 +23,12 @@ export interface IconGlyphs {
 }
 
 const NERD_GLYPHS: IconGlyphs = {
-	cwd: "",
+	cwd: " ",
 	session: "",
 	working: "",
 	done: "",
 	context: "",
-	model: "",
+	model: " ",
 	thinking: "",
 	input: "",
 	output: "",
