@@ -8,8 +8,9 @@
  */
 
 import type { AssistantMessage } from "@earendil-works/pi-ai";
-import type { ExtensionContext, Theme } from "@earendil-works/pi-coding-agent";
+import type { ExtensionContext, Theme, ThemeColor } from "@earendil-works/pi-coding-agent";
 import { truncateToWidth, visibleWidth, wrapTextWithAnsi } from "@earendil-works/pi-tui";
+import type { GitStatus } from "./git.ts";
 import type { IconGlyphs, IconMode } from "./icons.ts";
 import { resolveGlyphs, resolveIconMode } from "./icons.ts";
 import {
@@ -24,6 +25,7 @@ import {
 	providerColor,
 	sanitizeStatus,
 	stressColor,
+	truncateBranch,
 	truncatePath,
 	type PrioritizedSegment,
 } from "./utils.ts";
@@ -72,6 +74,54 @@ function renderContextBar(
 	const reserved = visibleWidth(contextIcon) + visibleWidth(pctText) + visibleWidth(ctxText) + 5 + 2;
 	const barWidth = Math.max(4, Math.min(12, width - reserved));
 	return `${contextIcon} ${renderBar(theme, contextPct, barWidth, resolveIconMode(iconMode) === "ascii")} ${pctText} ${theme.fg("dim", "·")} ${ctxText}`;
+}
+
+// ── Git 区段 ──
+
+function renderGitSegment(theme: Theme, git: GitStatus, glyphs: IconGlyphs): string {
+	const parts: string[] = [];
+
+	// 分支 / detached HEAD
+	if (git.branch) {
+		parts.push(theme.fg("mdLink", glyphs.gitBranch));
+		parts.push(theme.fg("mdLink", truncateBranch(git.branch, 40)));
+	} else if (git.commit?.detached) {
+		parts.push(theme.fg("warning", glyphs.gitBranch));
+		parts.push(theme.fg("warning", "HEAD"));
+		if (git.commit.oid) {
+			const shortHash = git.commit.oid.slice(0, 7);
+			const tag = git.commit.tag ? ` ${git.commit.tag}` : "";
+			parts.push(theme.fg("dim", `${shortHash}${tag}`));
+		}
+	}
+
+	// 变更计数
+	const statusIcons: string[] = [];
+	const addStatus = (count: number, glyph: string, color: ThemeColor) => {
+		if (count > 0) statusIcons.push(theme.fg(color, `${glyph}${count}`));
+	};
+	addStatus(git.conflicted, glyphs.gitConflicted, "error");
+	addStatus(git.deleted, glyphs.gitDeleted, "error");
+	addStatus(git.modified, glyphs.gitModified, "warning");
+	addStatus(git.renamed, glyphs.gitRenamed, "warning");
+	addStatus(git.staged, glyphs.gitStaged, "success");
+	addStatus(git.untracked, glyphs.gitUntracked, "muted");
+	addStatus(git.stashed, glyphs.gitStashed, "muted");
+
+	// 与远程的领先/落后
+	if (git.ahead > 0 && git.behind > 0) {
+		statusIcons.push(theme.fg("warning", `${glyphs.gitDiverged}${git.ahead}/${git.behind}`));
+	} else if (git.ahead > 0) {
+		statusIcons.push(theme.fg("success", `${glyphs.gitAhead}${git.ahead}`));
+	} else if (git.behind > 0) {
+		statusIcons.push(theme.fg("warning", `${glyphs.gitBehind}${git.behind}`));
+	}
+
+	if (statusIcons.length > 0) {
+		parts.push(`${theme.fg("dim", "[")}${statusIcons.join(" ")}${theme.fg("dim", "]")}`);
+	}
+
+	return parts.join(" ");
 }
 
 // ── 计时器 ──
@@ -129,6 +179,7 @@ function renderExtensionStatusLines(
 export interface FooterState {
 	workingSince: number | undefined;
 	lastDoneIn: number | undefined;
+	git: GitStatus;
 }
 
 export interface UsageTotals {
@@ -207,10 +258,12 @@ export function installFooter(
 	state: FooterState,
 	iconMode: IconMode,
 	setRequestRender?: (fn: (() => void) | undefined) => void,
+	scheduleGitRefresh?: () => void,
 ): () => void {
 	ctx.ui.setFooter((tui, theme, footerData) => {
 		setRequestRender?.(() => tui.requestRender());
 		const unsubBranch = footerData.onBranchChange(() => {
+			scheduleGitRefresh?.();
 			tui.requestRender();
 		});
 		return {
@@ -254,6 +307,12 @@ export function installFooter(
 						text: `${theme.fg("dim", glyphs.session)} ${theme.fg("text", truncateToWidth(sessionName, 24, theme.fg("dim", "...")))}`,
 						priority: 2,
 					});
+				}
+
+				// git 状态
+				const gitSeg = renderGitSegment(theme, state.git, glyphs);
+				if (gitSeg) {
+					leftParts.push({ text: gitSeg, priority: 3 });
 				}
 
 				// working timer

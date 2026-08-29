@@ -20,6 +20,16 @@ export interface IconGlyphs {
 	extensions: string;
 	gitBranch: string;
 	gitStatus: string;
+	gitAhead: string;
+	gitBehind: string;
+	gitDiverged: string;
+	gitConflicted: string;
+	gitStashed: string;
+	gitModified: string;
+	gitStaged: string;
+	gitUntracked: string;
+	gitRenamed: string;
+	gitDeleted: string;
 }
 
 const NERD_GLYPHS: IconGlyphs = {
@@ -35,8 +45,18 @@ const NERD_GLYPHS: IconGlyphs = {
 	cacheHit: "",
 	cost: "￥",
 	extensions: "",
-	gitBranch: "",
-	gitStatus: "",
+	gitBranch: "",
+	gitStatus: "",
+	gitAhead: "↑",
+	gitBehind: "↓",
+	gitDiverged: "⇕",
+	gitConflicted: "=",
+	gitStashed: "$",
+	gitModified: "!",
+	gitStaged: "+",
+	gitUntracked: "?",
+	gitRenamed: "»",
+	gitDeleted: "✘",
 };
 
 const ASCII_GLYPHS: IconGlyphs = {
@@ -54,6 +74,16 @@ const ASCII_GLYPHS: IconGlyphs = {
 	extensions: "&",
 	gitBranch: "*",
 	gitStatus: "*",
+	gitAhead: "^",
+	gitBehind: "v",
+	gitDiverged: "^v",
+	gitConflicted: "=",
+	gitStashed: "S",
+	gitModified: "!",
+	gitStaged: "A",
+	gitUntracked: "?",
+	gitRenamed: "r",
+	gitDeleted: "x",
 };
 
 const NERD_FONT_TERMINALS = new Set([
