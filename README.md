@@ -16,12 +16,37 @@
 ├── models.json        # 自定义 Provider 与模型配置
 ├── extensions/        # 自定义扩展
 │   ├── footer/             # TUI 底部状态栏（cwd/计时/context 进度/token 统计）
-│   ├── minimal-mode.ts
+│   ├── i-have-adhd/        # ADHD 模式输出规则集
 │   ├── pi-rtk-optimizer/   # RTK 命令重写与输出压缩优化
 │   └── tools.ts
 ├── LICENSE
 └── README.md
 ```
+
+## 🧩 扩展说明
+
+### footer — TUI 底部状态栏
+
+一个自绘的底部状态栏扩展，实时展示会话信息，随 TUI 生命周期自动安装/卸载。
+
+| 功能 | 说明 |
+|------|------|
+| 路径 | 当前工作目录（cwd） |
+| 计时 | 当前 agent 回合进行时长 / 上一次完成耗时 |
+| context 进度 | 上下文窗口使用进度 |
+| token 统计 | 输入/输出 token 用量，含缓存命中率与成本 |
+| 当前状态 | 模型、思考、扩展、git 分支等状态标识 |
+
+- 图标支持 **Nerd Font / ASCII** 两种模式，通过 `icons.ts` 自动检测终端切换
+- 相关文件：`index.ts`（生命周期装配）、`footer.ts`（渲染逻辑）、`icons.ts`（图标定义）、`utils.ts`（工具函数）
+
+### pi-rtk-optimizer
+
+对 RTK 命令进行重写与输出压缩，减少 token 消耗（见 `settings.json` 的 `packages` 说明）。
+
+### i-have-adhd
+
+ADHD 模式输出规则集。用户说「ADHD MODE ACTIVE」时生效，调整回复形态：先给下一步动作、步骤编号、每轮重述进度、给具体时间估计等，帮助 ADHD 大脑直接行动。
 
 ## ⚙️ 配置说明
 
