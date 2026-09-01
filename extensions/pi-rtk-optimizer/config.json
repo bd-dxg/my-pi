@@ -2,12 +2,12 @@
   "enabled": true,
   "mode": "rewrite",
   "guardWhenRtkMissing": true,
-  "showRewriteNotifications": true,
+  "showRewriteNotifications": false,
   "outputCompaction": {
-    "enabled": true,
+    "enabled": false,
     "stripAnsi": true,
     "readCompaction": {
-      "enabled": true
+      "enabled": false
     },
     "sourceCodeFilteringEnabled": false,
     "preserveExactSkillReads": false,
