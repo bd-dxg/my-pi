@@ -156,6 +156,9 @@ function renderStatsBlock(
 
 // ── 扩展状态行 ──
 
+// 已并入 Line 2 modelBlock 的扩展状态键，不再单独占行。
+const EXTENSION_STATUS_INLINE = new Set(["i-have-adhd"]);
+
 function renderExtensionStatusLines(
 	theme: Theme,
 	extensionStatuses: ReadonlyMap<string, string>,
@@ -163,6 +166,7 @@ function renderExtensionStatusLines(
 	width: number,
 ): string[] {
 	const statuses = Array.from(extensionStatuses.entries())
+		.filter(([key]) => !EXTENSION_STATUS_INLINE.has(key))
 		.sort(([a], [b]) => a.localeCompare(b))
 		.map(([, text]) => sanitizeStatus(text))
 		.filter((text) => text.length > 0);
@@ -345,6 +349,12 @@ export function installFooter(
 				modelParts.push(theme.fg("text", meta.model));
 				if (meta.effort && meta.effort !== "off") {
 					modelParts.push(theme.fg(effortColor(meta.effort), `${glyphs.thinking} ${meta.effort}`));
+				}
+
+				// ADHD 状态并入模型名后面（原独立状态行已排除此键）
+				const adhdStatus = footerData.getExtensionStatuses().get("i-have-adhd");
+				if (adhdStatus) {
+					modelParts.push(adhdStatus);
 				}
 				const modelBlock = modelParts.join(theme.fg("dim", " · "));
 				const statsBlock = renderStatsBlock(theme, totals, glyphs);
