@@ -51,7 +51,9 @@ ADHD 模式输出规则集。用户说「ADHD MODE ACTIVE」时生效，调整�
 
 ## 🎯 Skills 说明
 
-`skills/` 目录存放自定义 skills，按需复制到 `~\.agents\skills` 即可使用。
+> pi 会自动读取 `~\.agents\skills` 和 `~\.pi\agent\skills` 这两个全局目录
+
+`skills/` 目录存放自定义 skills
 
 | Skill | 功能 |
 |-------|------|
