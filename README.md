@@ -14,6 +14,7 @@
 ├── settings.json      # pi 核心设置（主题、包、提供商、代理等）
 ├── mcp.json           # MCP 服务器配置（chrome-devtools、searchcode、tavily）
 ├── models.json        # 自定义 Provider 与模型配置
+├── skills/            # 自定义 skills（见下方 Skills 说明）
 ├── extensions/        # 自定义扩展
 │   ├── footer/             # TUI 底部状态栏（cwd/计时/context 进度/token 统计）
 │   ├── i-have-adhd/        # ADHD 模式输出规则集
@@ -47,6 +48,30 @@
 ### i-have-adhd
 
 ADHD 模式输出规则集。用户说「ADHD MODE ACTIVE」时生效，调整回复形态：先给下一步动作、步骤编号、每轮重述进度、给具体时间估计等，帮助 ADHD 大脑直接行动。
+
+## 🎯 Skills 说明
+
+`skills/` 目录存放自定义 skills，按需复制到 `~\.agents\skills` 即可使用。
+
+| Skill | 功能 |
+|-------|------|
+| `gencom` | 根据 git diff 生成符合项目风格的提交信息 |
+| `code-review-expert` | 资深工程师视角的代码审查（SOLID、安全、可维护性） |
+| `planning-with-files` | 文件化任务规划，追踪多步骤复杂任务进度 |
+| `skill-creator` | 创建、优化 skill，含 eval 基准评测与报告生成 |
+| `skill-monitor` | 监控 GitHub 仓库文件更新，生成变更摘要 |
+| `i-have-adhd` | ADHD 模式输出规则（先给动作、编号步骤、具体时间估计） |
+| `humanizer-zh` | 去除中文文本的 AI 写作痕迹 |
+| `naming` | 根据中文描述生成英文标识符（PascalCase） |
+| `todo-list` | 个人待办增删改查，支持多级项目嵌套 |
+| `init-agents-md` | 扫描项目结构并初始化项目级 AGENTS.md |
+| `add-anchor` | 为 Markdown 标题添加自定义锚点 |
+| `add-frontmatter` | 为 Markdown 文件添加 Frontmatter |
+| `find-skills` | 发现并安装可用的 agent skills |
+| `github-issue-creator` | 按仓库模板创建带标签的 GitHub Issue |
+| `pr-creator` | 按仓库模板创建 Pull Request |
+| `pr-address-comments` | 处理当前分支的 GitHub PR 评论 |
+| `grill-me-docs-standalone` | 需求不明确时向用户提问澄清 |
 
 ## ⚙️ 配置说明
 
@@ -152,6 +177,7 @@ pi install @juicesharp/rpiv-todo
 2. 安装依赖包（见上方 `packages 安装` 章节）
 3. 将 `settings.json`、`mcp.json` 放置在 pi 配置目录中
 4. 将 `AGENTS.md` 放置在`~\.pi\agent`目录作为 AI 行为全局准则
+5. 将需要的 skill 从 `skills/` 复制到 `~\.agents\skills`
 
 ## 感谢
 
