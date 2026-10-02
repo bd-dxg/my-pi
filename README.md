@@ -4,6 +4,12 @@
 
 ## 📦 概述
 
+> **pi v1.0** 已内置 MCP 支持，不再需要 `pi-mcp-adapter` 包。
+
+## 📌 版本追踪
+
+> 当前配置对应 **pi v1.0**。以后每次更新配置时同步更新此处。
+
 本仓库集中管理 pi Agent 的个性化配置、扩展、MCP 服务以及开发规范，旨在为 AI 编码助手提供**一致的行为准则、工具链和工作流**。
 
 ## 🗂️ 目录结构
@@ -102,7 +108,6 @@ ADHD 模式输出规则集。用户说「ADHD MODE ACTIVE」时生效，调整�
 `settings.json` 中配置的 `packages` 需要单独安装，在终端执行：
 
 ```powershell
-pi install pi-mcp-adapter
 pi install @ff-labs/pi-fff
 pi install @juicesharp/rpiv-ask-user-question
 pi install @pi-unipi/notify
@@ -115,7 +120,6 @@ pi install @juicesharp/rpiv-todo
 
 | 包名 | 说明 |
 |------|------|
-| `pi-mcp-adapter` | MCP 协议适配器 |
 | `@ff-labs/pi-fff` | ff 文件搜索工具（ffgrep / fffind） |
 | `@juicesharp/rpiv-ask-user-question` | 结构化提问（ask_user_question 工具） |
 | `@pi-unipi/notify` | 跨平台通知（notify_user 工具） |
