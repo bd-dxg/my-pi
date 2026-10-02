@@ -9,7 +9,6 @@
   "theme": "cc-dark",
   "defaultThinkingLevel": "high",
   "packages": [
-    "npm:pi-mcp-adapter",
     "npm:@ff-labs/pi-fff",
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:@pi-unipi/notify",
