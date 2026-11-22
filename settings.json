@@ -1,20 +1,19 @@
 {
-  "lastChangelogVersion": "0.84.3",
+  "lastChangelogVersion": "1.6.0",
+  "$schema": "https://pi.dev/schemas/settings.schema.json",
   "defaultTools": [
     "read",
     "powershell",
     "edit",
     "write"
   ],
-  "theme": "cc-dark",
+  "theme": "cc-dark-hc",
   "defaultThinkingLevel": "high",
   "packages": [
-    "npm:@ff-labs/pi-fff",
     "npm:@juicesharp/rpiv-ask-user-question",
-    "npm:@pi-unipi/notify",
     "npm:pi-cc-extensions",
-    "npm:pi-rtk-optimizer",
-    "npm:@juicesharp/rpiv-todo"
+    "npm:@juicesharp/rpiv-todo",
+    "npm:planning-with-files"
   ],
   "retry": {
     "enabled": true,
@@ -28,14 +27,17 @@
     "enabled": false
   },
   "httpProxy": "http://127.0.0.1:7897",
-  "hideThinkingBlock": true,
+  "hideThinkingBlock": false,
   "showCacheMissNotices": false,
-  "defaultProvider": "LinuxHub",
-  "defaultModel": "deepseek-v4-flash-vision-exp",
   "quietStartup": true,
-  "tuiMode": "regular",
-  "fullscreenExitOutput": "transcript",
+  "tuiMode": "fullscreen",
   "markdown": {
     "mermaid": "final"
+  },
+  "defaultProvider": "墨析AI",
+  "defaultModel": "deepseek-v4.1-flash",
+  "fullscreenCopyOnSelect": false,
+  "extensionChangelogVersions": {
+    "{\"source\":\"npm:pi-cc-extensions\",\"scope\":\"user\"}": "1.0.21"
   }
 }
