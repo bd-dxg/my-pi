@@ -4,11 +4,11 @@
 
 ## 📦 概述
 
-> **pi v1.0** 已内置 MCP 支持，不再需要 `pi-mcp-adapter` 包。
+> **pi v1.0+** 已内置 MCP 支持，不再需要 `pi-mcp-adapter` 包。
 
 ## 📌 版本追踪
 
-> 当前配置对应 **pi v1.0**。以后每次更新配置时同步更新此处。
+> 当前配置对应 **pi v1.6.0**。以后每次更新配置时同步更新此处。
 
 本仓库集中管理 pi Agent 的个性化配置、扩展、MCP 服务以及开发规范，旨在为 AI 编码助手提供**一致的行为准则、工具链和工作流**。
 
@@ -20,12 +20,13 @@
 ├── settings.json      # pi 核心设置（主题、包、提供商、代理等）
 ├── mcp.json           # MCP 服务器配置（chrome-devtools、searchcode、tavily）
 ├── models.json        # 自定义 Provider 与模型配置
+├── notify-icon.png    # Windows Toast 通知图标（notify 扩展使用）
 ├── skills/            # 自定义 skills（见下方 Skills 说明）
 ├── extensions/        # 自定义扩展
 │   ├── footer/             # TUI 底部状态栏（cwd/计时/context 进度/token 统计）
-│   ├── i-have-adhd/        # ADHD 模式输出规则集
-│   ├── pi-rtk-optimizer/   # RTK 命令重写与输出压缩优化
-│   └── tools.ts
+│   ├── notify.ts           # Windows Toast 桌面通知
+│   ├── zvision.ts          # image_understand 图像理解工具
+│   └── tools.ts            # /tools 工具开关命令
 ├── LICENSE
 └── README.md
 ```
@@ -45,15 +46,31 @@
 | 当前状态 | 模型、思考、扩展、git 分支等状态标识 |
 
 - 图标支持 **Nerd Font / ASCII** 两种模式，通过 `icons.ts` 自动检测终端切换
-- 相关文件：`index.ts`（生命周期装配）、`footer.ts`（渲染逻辑）、`icons.ts`（图标定义）、`utils.ts`（工具函数）
+- 扩展状态并入第二行左侧，优先级最低，宽度不足时优先被截断，不再单独占行
+- 相关文件：`index.ts`（生命周期装配）、`footer.ts`（渲染逻辑）、`icons.ts`（图标定义）、`git.ts`（git 状态）、`utils.ts`（工具函数）
 
-### pi-rtk-optimizer
+### notify — 桌面通知
 
-对 RTK 命令进行重写与输出压缩，减少 token 消耗（见 `settings.json` 的 `packages` 说明）。
+在「Pi 需要你」的两个时刻弹出 Windows Toast 通知：
 
-### i-have-adhd
+| 时机 | 说明 |
+|------|------|
+| `agent_settled` | 一轮跑完、等待下一条消息，正文带最后一段回复摘要 |
+| `ui_prompt_start` | 弹选择/确认/输入框时通知（含 `ask_user_question`） |
 
-ADHD 模式输出规则集。用户说「ADHD MODE ACTIVE」时生效，调整回复形态：先给下一步动作、步骤编号、每轮重述进度、给具体时间估计等，帮助 ADHD 大脑直接行动。
+- 仅在 Windows + TUI 模式生效；前台窗口属于 pi 自身祖先进程时静默跳过
+- 每次通知起一个隐藏 `powershell.exe`（`-EncodedCommand`），不阻塞主线程，失败静默
+- 可选配置：`%PI_CODING_AGENT_DIR%/notify.json`
+
+### zvision — 图像理解
+
+注册自定义工具 `image_understand`，把本地图片或图片 URL 交给智谱 `GLM-4.6V-Flash` 视觉模型理解。适合当前会话模型不支持图片输入时「看懂」截图。
+
+- 配置：环境变量 `ZHIPU_API_KEY`（在 open.bigmodel.cn 申请，免费）
+
+### tools — 工具开关
+
+提供 `/tools` 命令交互式启用/禁用工具，选择结果随会话持久化。
 
 ## 🎯 Skills 说明
 
@@ -65,13 +82,11 @@ ADHD 模式输出规则集。用户说「ADHD MODE ACTIVE」时生效，调整�
 |-------|------|
 | `gencom` | 根据 git diff 生成符合项目风格的提交信息 |
 | `code-review-expert` | 资深工程师视角的代码审查（SOLID、安全、可维护性） |
-| `planning-with-files` | 文件化任务规划，追踪多步骤复杂任务进度 |
+| `grill-me` | 按设计树逐轮逼问需求，直到达成共识 |
 | `skill-creator` | 创建、优化 skill，含 eval 基准评测与报告生成 |
 | `skill-monitor` | 监控 GitHub 仓库文件更新，生成变更摘要 |
-| `i-have-adhd` | ADHD 模式输出规则（先给动作、编号步骤、具体时间估计） |
 | `humanizer-zh` | 去除中文文本的 AI 写作痕迹 |
 | `naming` | 根据中文描述生成英文标识符（PascalCase） |
-| `todo-list` | 个人待办增删改查，支持多级项目嵌套 |
 | `init-agents-md` | 扫描项目结构并初始化项目级 AGENTS.md |
 | `add-anchor` | 为 Markdown 标题添加自定义锚点 |
 | `add-frontmatter` | 为 Markdown 文件添加 Frontmatter |
@@ -79,7 +94,8 @@ ADHD 模式输出规则集。用户说「ADHD MODE ACTIVE」时生效，调整�
 | `github-issue-creator` | 按仓库模板创建带标签的 GitHub Issue |
 | `pr-creator` | 按仓库模板创建 Pull Request |
 | `pr-address-comments` | 处理当前分支的 GitHub PR 评论 |
-| `grill-me-docs-standalone` | 需求不明确时向用户提问澄清 |
+
+> `planning-with-files`（文件化任务规划）已改为通过 npm 包提供，见下方 `packages 安装`。
 
 ## ⚙️ 配置说明
 
@@ -87,45 +103,42 @@ ADHD 模式输出规则集。用户说「ADHD MODE ACTIVE」时生效，调整�
 
 | 配置项 | 说明 |
 |--------|------|
-| `lastChangelogVersion` | 已读过的版本更新日志版本（0.84.3） |
-| `theme` | 界面主题（cc-dark） |
-| `defaultProvider` / `defaultModel` | 默认 AI 提供商与模型（LinuxHub / deepseek-v4-flash-vision-exp） |
+| `lastChangelogVersion` | 已读过的版本更新日志版本（1.6.0） |
+| `theme` | 界面主题（cc-dark-hc） |
+| `defaultProvider` / `defaultModel` | 默认 AI 提供商与模型（墨析AI / deepseek-v4.1-flash） |
 | `defaultThinkingLevel` | 默认思考等级（high） |
 | `httpProxy` | HTTP 代理地址（127.0.0.1:7897） |
 | `packages` | 需要额外安装的 pi 包（见下方安装说明） |
 | `defaultTools` | 默认工具列表（read、powershell、edit、write） |
 | `retry` | 自动重试策略（最多 8 次，基础延迟 10s，provider 最大重试延迟 120s） |
 | `compaction` | 上下文压缩（已关闭） |
-| `hideThinkingBlock` | 隐藏思考过程 |
+| `hideThinkingBlock` | 隐藏思考过程（false，默认展开） |
 | `showCacheMissNotices` | 缓存未命中提示 |
 | `quietStartup` | 静默启动 |
-| `tuiMode` | TUI 模式（regular） |
-| `fullscreenExitOutput` | 全屏模式退出时输出的内容（transcript） |
+| `tuiMode` | TUI 模式（fullscreen） |
+| `fullscreenCopyOnSelect` | 全屏模式下选中即复制（false） |
 | `markdown.mermaid` | Mermaid 图表渲染时机（final） |
+| `extensionChangelogVersions` | 各扩展已读更新日志版本 |
 
 ### packages 安装
 
 `settings.json` 中配置的 `packages` 需要单独安装，在终端执行：
 
 ```powershell
-pi install @ff-labs/pi-fff
 pi install @juicesharp/rpiv-ask-user-question
-pi install @pi-unipi/notify
 pi install pi-cc-extensions
-pi install pi-rtk-optimizer
 pi install @juicesharp/rpiv-todo
+pi install planning-with-files
 ```
 
 各包功能：
 
 | 包名 | 说明 |
 |------|------|
-| `@ff-labs/pi-fff` | ff 文件搜索工具（ffgrep / fffind） |
 | `@juicesharp/rpiv-ask-user-question` | 结构化提问（ask_user_question 工具） |
-| `@pi-unipi/notify` | 跨平台通知（notify_user 工具） |
 | `pi-cc-extensions` | Claude Code 风格 UI、上下文检查等生产力套件 |
-| `pi-rtk-optimizer` | RTK 命令重写与输出压缩优化（节省 token） |
 | `@juicesharp/rpiv-todo` | 个人待办管理（todo-list 增删改查） |
+| `planning-with-files` | 文件化任务规划（task_plan / findings / progress），替代原本地 skill |
 
 ### MCP 服务
 
