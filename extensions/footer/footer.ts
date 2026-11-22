@@ -3,13 +3,13 @@
  *
  * 两行布局：
  *   Line 1: 左(cwd/会话/working 计时器) + 右(context 进度条)
- *   Line 2: 左(model/effort) + 右(token 统计/成本)
- *   可选额外行：扩展状态
+ *   Line 2: 左(model/effort + 扩展状态) + 右(token 统计/成本)
+ *   扩展状态不再单独占行，宽度不足时按最低优先级截断。
  */
 
 import type { AssistantMessage } from "@earendil-works/pi-ai";
 import type { ExtensionContext, Theme, ThemeColor } from "@earendil-works/pi-coding-agent";
-import { truncateToWidth, visibleWidth, wrapTextWithAnsi } from "@earendil-works/pi-tui";
+import { truncateToWidth, visibleWidth } from "@earendil-works/pi-tui";
 import type { GitStatus } from "./git.ts";
 import type { IconGlyphs, IconMode } from "./icons.ts";
 import { resolveGlyphs, resolveIconMode } from "./icons.ts";
@@ -154,28 +154,24 @@ function renderStatsBlock(
 	return stats.join(` ${theme.fg("dim", "|")} `);
 }
 
-// ── 扩展状态行 ──
+// ── 扩展状态段 ──
 
-// 已并入 Line 2 modelBlock 的扩展状态键，不再单独占行。
-const EXTENSION_STATUS_INLINE = new Set(["i-have-adhd"]);
-
-function renderExtensionStatusLines(
+function extensionStatusSegments(
 	theme: Theme,
 	extensionStatuses: ReadonlyMap<string, string>,
 	glyphs: IconGlyphs,
-	width: number,
-): string[] {
+): PrioritizedSegment[] {
 	const statuses = Array.from(extensionStatuses.entries())
-		.filter(([key]) => !EXTENSION_STATUS_INLINE.has(key))
 		.sort(([a], [b]) => a.localeCompare(b))
 		.map(([, text]) => sanitizeStatus(text))
 		.filter((text) => text.length > 0);
-	if (statuses.length === 0) return [];
 
-	const separator = ` ${theme.fg("dim", "|")} `;
-	const statusText = statuses.map((status) => theme.fg("muted", status)).join(separator);
-	const line = `${theme.fg("mdLink", glyphs.extensions)} ${statusText}`;
-	return wrapTextWithAnsi(line, width);
+	return statuses.map((status, index) => ({
+		text: index === 0
+			? `${theme.fg("mdLink", glyphs.extensions)} ${theme.fg("muted", status)}`
+			: theme.fg("muted", status),
+		priority: 0,
+	}));
 }
 
 // ── 状态类型 ──
@@ -351,27 +347,25 @@ export function installFooter(
 					modelParts.push(theme.fg(effortColor(meta.effort), `${glyphs.thinking} ${meta.effort}`));
 				}
 
-				// ADHD 状态并入模型名后面（原独立状态行已排除此键）
-				const adhdStatus = footerData.getExtensionStatuses().get("i-have-adhd");
-				if (adhdStatus) {
-					modelParts.push(adhdStatus);
-				}
 				const modelBlock = modelParts.join(theme.fg("dim", " · "));
 				const statsBlock = renderStatsBlock(theme, totals, glyphs);
-				const line2 = alignRight(modelBlock, statsBlock, width, theme);
 
-				const mainLines = [line1, line2]
+				// 扩展状态并入 Line 2 左侧：优先级最低，空间不足时先被截断
+				const statusSegments = extensionStatusSegments(
+					theme,
+					footerData.getExtensionStatuses(),
+					glyphs,
+				);
+				const leftBudget = Math.max(0, width - visibleWidth(statsBlock) - 1);
+				const line2Left = fitSegmentsByPriority(
+					[{ text: modelBlock, priority: 1 }, ...statusSegments],
+					leftBudget,
+					theme.fg("dim", "..."),
+				).join(` ${theme.fg("dim", "·")} `);
+				const line2 = alignRight(line2Left, statsBlock, width, theme);
+
+				return [line1, line2]
 					.map((line) => truncateToWidth(line, width, theme.fg("dim", "...")));
-
-				return [
-					...mainLines,
-					...renderExtensionStatusLines(
-						theme,
-						footerData.getExtensionStatuses(),
-						glyphs,
-						width,
-					),
-				];
 			},
 		};
 	});
